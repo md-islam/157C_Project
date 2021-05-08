@@ -7,20 +7,162 @@ import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
+import java.util.Scanner;
+
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Console {
     public static void main(String[] args) {
-        connectToMongo();
+//        connectToMongo();
 //        executeOneFunction();
 //        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
 //        MongoDatabase database = mongoClient.getDatabase("spotify");
 //        MongoCollection<Document> collection = database.getCollection("US");
 //        executeQuestionThree(collection);
+        runProgram();
+    }
+
+    private static void runProgram() {
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+        Scanner in = new Scanner(System.in);
+        displayChoices();
+        boolean keepAsking = true;
+        while (keepAsking) {
+            int choice = in.nextInt();
+            switch (choice) {
+                case 1:
+                    executeChoice1(collection);
+                    break;
+                case 2:
+                    executeChoice2(collection);
+                    break;
+                case 3:
+                    executeChoice3(collection);
+                    break;
+                case 4:
+                    executeChoice4(collection);
+                    break;
+                case 5:
+                    executeChoice5(collection);
+                    break;
+                case 6:
+                    executeChoice6(collection);
+                    break;
+                case 7:
+                    executeChoice7(collection);
+                    break;
+                case 8:
+                    executeChoice8(collection);
+                    break;
+                case 9:
+                    executeChoice9(collection);
+                    break;
+                case 10:
+                    executeChoice10(collection);
+                    break;
+                case 11:
+                    executeChoice11(collection);
+                    break;
+                case 12:
+                    executeChoice12(collection);
+                    break;
+                case 13:
+                    executeChoice13(collection);
+                    break;
+                case 14:
+                    executeChoice14(collection);
+                    break;
+                case 15:
+                    executeChoice15(collection);
+                    break;
+                default:
+                    System.out.println("Invalid choice !");
+                    break;
+            }
+            System.out.println("Want to execute another query ? (Y/N)");
+            String yesNoInput = in.next();
+            keepAsking = yesNoInput.equalsIgnoreCase("Y") ||
+                    yesNoInput.equalsIgnoreCase("yes");
+            if (keepAsking) {
+                displayChoices();
+            }
+        }
+    }
+
+    private static void displayChoices() {
+        System.out.printf("Operation %d: %s", 1, "Find danceability of a song track greater than a specific value within a specific country\n");
+        System.out.printf("Operation %d: %s", 2, "Which artist is the most/least popular?\n");
+        System.out.printf("Operation %d: %s", 3, "For a given artist, which song is the most popular?\n");
+        System.out.printf("Operation %d: %s", 4, "Which artist released most songs?\n");
+        System.out.printf("Operation %d: %s", 5, "How many songs are listed in Spotify?\n");
+        System.out.printf("Operation %d: %s", 6, "Which song has the longest duration?\n");
+        System.out.printf("Operation %d: %s", 7, "Which song is the most/least popular?\n");
+        System.out.printf("Operation %d: %s", 8, "Find songs that are released in 2000\n");
+        System.out.printf("Operation %d: %s", 9, "Which explicit song is the most/least popular in a given country?\n");
+        System.out.printf("Operation %d: %s", 10, "Find songs that released between 2000 and 2002\n");
+        System.out.printf("Operation %d: %s", 11, "Which songs have a specific release date(like what is the exact year)?\n");
+        System.out.printf("Operation %d: %s", 12, "For a particular song, find its popularity(in a particular country)\n");
+        System.out.printf("Operation %d: %s", 13, "Find songs that has duration of longer than a particular value\n");
+        System.out.printf("Operation %d: %s", 14, "Find songs that has tempo of longer than a particular value\n");
+        System.out.printf("Operation %d: %s", 15, "Insert a particular song information\n");
+        System.out.println("Enter a number for the operation you want to do");
+    }
+
+    private static void executeChoice7(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice6(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice5(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice4(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice3(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice2(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice8(MongoCollection<Document> collection) {
+    }
+
+    private static void executeChoice9(MongoCollection<Document> collection) {
+    }
+
+    private static void executeChoice10(MongoCollection<Document> collection) {
+    }
+
+    private static void executeChoice11(MongoCollection<Document> collection) {
+    }
+
+    private static void executeChoice12(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice13(MongoCollection<Document> collection) {
+    }
+
+    private static void executeChoice14(MongoCollection<Document> collection) {
+    }
+
+    private static void executeChoice15(MongoCollection<Document> collection) {
+
+    }
+
+    private static void executeChoice1(MongoCollection<Document> collection) {
+
     }
 
     private static void executeQuestionThree(MongoCollection<Document> collection) {
@@ -84,78 +226,75 @@ public class Console {
     }
 
     private static void connectToMongo() {
-        MongoClient mongoClient = MongoClients.create("mongodb://3.17.167.23:27001");
-
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
         MongoIterable<String> databaseNames = mongoClient.listDatabaseNames();
         for (String databaseName : databaseNames) {
             System.out.println(databaseName);
         }
     }
-    
-    
-    private static void executeQueryOne(String countryCode, int danceability){
+
+
+    private static void executeQueryOne(String countryCode, int danceability) {
         MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
         MongoDatabase database = mongoClient.getDatabase("project");
         MongoCollection<Document> collection = database.getCollection("spotify");
         //Find danceability of a track greater than a specific value within a specific country
-      
-        FindIterable<Document> documents = collection.find(
-        		new Document("danceability", new Document("$gte", danceability)
-        		.append("country", countryCode)));
-        for (Document d : documents) {
-            System.out.println(d.toJson());
-        }
-    }
-    
 
-    private static void executeQueryTwo(String countryCode){
-        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
-        MongoDatabase database = mongoClient.getDatabase("project");
-        MongoCollection<Document> collection = database.getCollection("spotify");
-     
-        
-        //Which artist is the most least popular in a specific country?
-      
-        FindIterable<Document> documents = collection.find(eq("country", countryCode))
-        		.sort(Sorts.descending("popularity")).limit(1);
+        FindIterable<Document> documents = collection.find(
+                new Document("danceability", new Document("$gte", danceability)
+                        .append("country", countryCode)));
         for (Document d : documents) {
             System.out.println(d.toJson());
         }
     }
-    
-    //test this might not work
-    private static void executeQueryThree(String artist){
+
+
+    private static void executeQueryTwo(String countryCode) {
         MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
         MongoDatabase database = mongoClient.getDatabase("project");
         MongoCollection<Document> collection = database.getCollection("spotify");
-     
-       // For a given artist, which song is the most popular?
+
+
+        //Which artist is the most least popular in a specific country?
+
+        FindIterable<Document> documents = collection.find(eq("country", countryCode))
+                .sort(Sorts.descending("popularity")).limit(1);
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+
+    //test this might not work
+    private static void executeQueryThree(String artist) {
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+
+        // For a given artist, which song is the most popular?
 
         FindIterable<Document> documents = collection.find
-        		(new Document("artists",new Document("$in", artist)))
-        		.sort(Sorts.descending("popularity")).limit(1);
+                (new Document("artists", new Document("$in", artist)))
+                .sort(Sorts.descending("popularity")).limit(1);
         for (Document d : documents) {
             System.out.println(d.toJson());
         }
     }
-    private static void executeQueryFour(String artist){
-        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
-        MongoDatabase database = mongoClient.getDatabase("project");
-        MongoCollection<Document> collection = database.getCollection("spotify");
-     
-       // Which artist released most songs?
+//    private static void executeQueryFour(String artist){
+//        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+//        MongoDatabase database = mongoClient.getDatabase("project");
+//        MongoCollection<Document> collection = database.getCollection("spotify");
+//
+//       // Which artist released most songs?
+//
+//        FindIterable<Document> documents = collection.aggregate(
+//        	      Arrays.asList(
+//        	              Aggregates.match(Filters.eq("categories", "Bakery")),
+//        	              Aggregates.group("$stars", Accumulators.sum("count", 1))
+//        	      )
+//        for (Document d : documents) {
+//            System.out.println(d.toJson());
+//        }
+//    }
 
-        FindIterable<Document> documents = collection.aggregate(
-        	      Arrays.asList(
-        	              Aggregates.match(Filters.eq("categories", "Bakery")),
-        	              Aggregates.group("$stars", Accumulators.sum("count", 1))
-        	      )
-        for (Document d : documents) {
-            System.out.println(d.toJson());
-        }
-    }
-    
-    
-    
-    
+
 }
