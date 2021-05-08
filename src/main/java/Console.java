@@ -102,25 +102,36 @@ public class Console {
         System.out.printf("Operation %d: %s", 4, "Which artist released most songs?\n");
         System.out.printf("Operation %d: %s", 5, "How many songs are listed in Spotify?\n");
         System.out.printf("Operation %d: %s", 6, "Which song has the longest duration?\n");
-        System.out.printf("Operation %d: %s", 7, "Which song is the most/least popular?\n");
+        System.out.printf("Operation %d: %s", 7, "Which song is the least popular for Artist Ignacio Corsini\n");
         System.out.printf("Operation %d: %s", 8, "Find songs that are released in 2000\n");
         System.out.printf("Operation %d: %s", 9, "Which explicit song is the most/least popular in a given country?\n");
         System.out.printf("Operation %d: %s", 10, "Find songs that released between 2000 and 2002\n");
-        System.out.printf("Operation %d: %s", 11, "Which songs have a specific release date(like what is the exact year)?\n");
+        System.out.printf("Operation %d: %s", 11, "Find a song that has at least 1 danceability\n");
         System.out.printf("Operation %d: %s", 12, "For a particular song, find its popularity(in a particular country)\n");
-        System.out.printf("Operation %d: %s", 13, "Find songs that has duration of longer than a particular value\n");
-        System.out.printf("Operation %d: %s", 14, "Find songs that has tempo of longer than a particular value\n");
+        System.out.printf("Operation %d: %s", 13, "Find songs that has duration of longer than 100000 seconds\n");
+        System.out.printf("Operation %d: %s", 14, "Find songs that has tempo of longer than 70 for a particular artist(Maria Konopnicka)\n");
         System.out.printf("Operation %d: %s", 15, "Insert a particular song information\n");
         System.out.println("Enter a number for the operation you want to do");
     }
 
     private static void executeChoice7(MongoCollection<Document> collection) {
-    	
-
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+        
+        FindIterable<Document> documents = collections.find(new BasicDBObject("artists","Ignacio Corsini")).sort(new BasicDBObject("duration_ms",-1)).limit(1);
+        
+        
     }
 
     private static void executeChoice6(MongoCollection<Document> collection) {
-    	 
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+        
+        FindIterable<Document> documents = collections.find().sort(new BasicDBObject("duration_ms",-1)).limit(1);
+        
+        
 
     }
 
@@ -196,8 +207,20 @@ public class Console {
 
     private static void executeChoice11(MongoCollection<Document> collection) {
     	
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
     	
-    	
+        BasicDBObject getQuery = new BasicDBObject();
+        getQuery.put("danceability", new BasicDBObject("$gt", 1));
+        
+        FindIterable<Document> documents = collections.find(getQuery).limit(1);
+        
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+     
+        
     }
 
     private static void executeChoice12(MongoCollection<Document> collection) {
@@ -212,22 +235,46 @@ public class Console {
             obj.add(new BasicDBObject("name", "Lady of the Evening"));
             obj.add(new BasicDBObject("country", "AD"));
             andQuery.put("$and", obj);
-            FindIterable<Document> documents = collections.find(andQuery).sort(new BasicDBObject("popularity",1)).limit(1);
+            FindIterable<Document> documents = collections.find(andQuery);
            for (Document d : documents) {
                  System.out.println(d.toJson());
              }
         
-        
-        
+       
         
     	
 
     }
 
     private static void executeChoice13(MongoCollection<Document> collection) {
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+    	
+        BasicDBObject getQuery = new BasicDBObject();
+        getQuery.put("duration_ms", new BasicDBObject("$gt", 100000));
+        FindIterable<Document> documents = collections.find(getQuery).limit(10);
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
     }
 
     private static void executeChoice14(MongoCollection<Document> collection) {
+    		
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+        
+        BasicDBObject andQuery = new BasicDBObject();
+        List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+         obj.add(new BasicDBObject("artist", "Maria Konopnicka"));
+         obj.add(new BasicDBObject("tempo", new BasicDBObject("$gt", 70)));
+         andQuery.put("$and", obj);
+         FindIterable<Document> documents = collections.find(andQuery);
+         for (Document d : documents) {
+               System.out.println(d.toJson());
+           }
+        
     }
 
     private static void executeChoice15(MongoCollection<Document> collection) {
