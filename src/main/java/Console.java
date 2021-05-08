@@ -10,6 +10,9 @@ import org.bson.Document;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Console {
     public static void main(String[] args) {
         connectToMongo();
@@ -88,4 +91,71 @@ public class Console {
             System.out.println(databaseName);
         }
     }
+    
+    
+    private static void executeQueryOne(String countryCode, int danceability){
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+        //Find danceability of a track greater than a specific value within a specific country
+      
+        FindIterable<Document> documents = collection.find(
+        		new Document("danceability", new Document("$gte", danceability)
+        		.append("country", countryCode)));
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+    
+
+    private static void executeQueryTwo(String countryCode){
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+     
+        
+        //Which artist is the most least popular in a specific country?
+      
+        FindIterable<Document> documents = collection.find(eq("country", countryCode))
+        		.sort(Sorts.descending("popularity")).limit(1);
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+    
+    //test this might not work
+    private static void executeQueryThree(String artist){
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+     
+       // For a given artist, which song is the most popular?
+
+        FindIterable<Document> documents = collection.find
+        		(new Document("artists",new Document("$in", artist)))
+        		.sort(Sorts.descending("popularity")).limit(1);
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+    private static void executeQueryFour(String artist){
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+     
+       // Which artist released most songs?
+
+        FindIterable<Document> documents = collection.aggregate(
+        	      Arrays.asList(
+        	              Aggregates.match(Filters.eq("categories", "Bakery")),
+        	              Aggregates.group("$stars", Accumulators.sum("count", 1))
+        	      )
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+    
+    
+    
+    
 }
