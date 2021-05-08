@@ -112,30 +112,46 @@ public class Console {
     }
 
     private static void executeChoice7(MongoCollection<Document> collection) {
+    	
 
     }
 
     private static void executeChoice6(MongoCollection<Document> collection) {
+    	 
 
     }
 
     private static void executeChoice5(MongoCollection<Document> collection) {
+    	 
 
     }
 
     private static void executeChoice4(MongoCollection<Document> collection) {
+    	
 
     }
 
     private static void executeChoice3(MongoCollection<Document> collection) {
+    	
 
     }
 
     private static void executeChoice2(MongoCollection<Document> collection) {
+    	 
 
     }
 
     private static void executeChoice8(MongoCollection<Document> collection) {
+    	 MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+         MongoDatabase database = mongoClient.getDatabase("spotify");
+         MongoCollection<Document> collection = database.getCollection("US");
+    	
+    	
+    	  FindIterable<Document> documents = collection.find(eq("release_date", 2000));
+         for (Document d : documents) {
+              System.out.println(d.toJson());
+          }
+    	
     }
 
     private static void executeChoice9(MongoCollection<Document> collection) {
@@ -295,6 +311,7 @@ public class Console {
 //            System.out.println(d.toJson());
 //        }
 //    }
-
+    
+   
 
 }
