@@ -115,9 +115,7 @@ public class Console {
     }
 
     private static void executeChoice7(MongoCollection<Document> collection) {
-    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
-        MongoDatabase database = mongoClient.getDatabase("spotify");
-        MongoCollection<Document> collections = database.getCollection("spotify");
+
         
         FindIterable<Document> documents = collections.find(new BasicDBObject("artists","Ignacio Corsini")).sort(new BasicDBObject("duration_ms",-1)).limit(1);
         
@@ -125,9 +123,6 @@ public class Console {
     }
 
     private static void executeChoice6(MongoCollection<Document> collection) {
-    	MongoClient mongoClient = MongoClients.create("mongodb://172.31.17.203:27001");
-        MongoDatabase database = mongoClient.getDatabase("spotify");
-        MongoCollection<Document> collections = database.getCollection("spotify");
         
         FindIterable<Document> documents = collections.find().sort(new BasicDBObject("duration_ms",-1)).limit(1);
         
