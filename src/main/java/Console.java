@@ -117,14 +117,14 @@ public class Console {
     private static void executeChoice7(MongoCollection<Document> collection) {
 
         
-        FindIterable<Document> documents = collections.find(new BasicDBObject("artists","Ignacio Corsini")).sort(new BasicDBObject("duration_ms",-1)).limit(1);
+        FindIterable<Document> documents = collection.find(new BasicDBObject("artists","Ignacio Corsini")).sort(new BasicDBObject("duration_ms",-1)).limit(1);
         
         
     }
 
     private static void executeChoice6(MongoCollection<Document> collection) {
         
-        FindIterable<Document> documents = collections.find().sort(new BasicDBObject("duration_ms",-1)).limit(1);
+        FindIterable<Document> documents = collection.find().sort(new BasicDBObject("duration_ms",-1)).limit(1);
         
         
 
