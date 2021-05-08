@@ -115,7 +115,7 @@ public class Console {
     }
 
     private static void executeChoice7(MongoCollection<Document> collection) {
-    	MongoClient mongoClient = MongoClients.create("mongodb://172.31.17.203:27001");
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
         MongoDatabase database = mongoClient.getDatabase("spotify");
         MongoCollection<Document> collections = database.getCollection("spotify");
         
@@ -156,7 +156,7 @@ public class Console {
     }
 
     private static void executeChoice8(MongoCollection<Document> collection) {
-    	 MongoClient mongoClient = MongoClients.create("mongodb://172.31.17.203:27001");
+    	 MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
          MongoDatabase database = mongoClient.getDatabase("spotify");
          MongoCollection<Document> collections = database.getCollection("spotify");
     	
@@ -169,7 +169,7 @@ public class Console {
     }
 
     private static void executeChoice9(MongoCollection<Document> collection) {
-    	MongoClient mongoClient = MongoClients.create("mongodb://172.31.17.203:27001");
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
         MongoDatabase database = mongoClient.getDatabase("spotify");
         MongoCollection<Document> collections = database.getCollection("spofity");
         
