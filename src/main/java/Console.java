@@ -123,4 +123,39 @@ public class Console {
         }
     }
     
+    //test this might not work
+    private static void executeQueryThree(String artist){
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+     
+       // For a given artist, which song is the most popular?
+
+        FindIterable<Document> documents = collection.find
+        		(new Document("artists",new Document("$in", artist)))
+        		.sort(Sorts.descending("popularity")).limit(1);
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+    private static void executeQueryFour(String artist){
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("project");
+        MongoCollection<Document> collection = database.getCollection("spotify");
+     
+       // Which artist released most songs?
+
+        FindIterable<Document> documents = collection.aggregate(
+        	      Arrays.asList(
+        	              Aggregates.match(Filters.eq("categories", "Bakery")),
+        	              Aggregates.group("$stars", Accumulators.sum("count", 1))
+        	      )
+        for (Document d : documents) {
+            System.out.println(d.toJson());
+        }
+    }
+    
+    
+    
+    
 }
