@@ -1,3 +1,4 @@
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -7,6 +8,8 @@ import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -144,10 +147,10 @@ public class Console {
     private static void executeChoice8(MongoCollection<Document> collection) {
     	 MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
          MongoDatabase database = mongoClient.getDatabase("spotify");
-         MongoCollection<Document> collection = database.getCollection("US");
+         MongoCollection<Document> collections = database.getCollection("spotify");
     	
     	
-    	  FindIterable<Document> documents = collection.find(eq("release_date", 2000));
+    	  FindIterable<Document> documents = collections.find(eq("release_date", 2000));
          for (Document d : documents) {
               System.out.println(d.toJson());
           }
@@ -155,15 +158,69 @@ public class Console {
     }
 
     private static void executeChoice9(MongoCollection<Document> collection) {
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spofity");
+        
+        BasicDBObject andQuery = new BasicDBObject();
+        List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+        obj.add(new BasicDBObject("explicit", 1));
+        obj.add(new BasicDBObject("country", "AD"));
+        andQuery.put("$and", obj);
+        FindIterable<Document> documents = collections.find(andQuery).sort(new BasicDBObject("popularity",1)).limit(1);
+       for (Document d : documents) {
+             System.out.println(d.toJson());
+         }
+        
+    	
     }
 
     private static void executeChoice10(MongoCollection<Document> collection) {
+    	
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+    	
+        BasicDBObject inQuery = new BasicDBObject();
+             List<Integer> list = new ArrayList<Integer>();
+             list.add(2000);
+             list.add(2001);
+             list.add(2002);
+             inQuery.put("release_date", new BasicDBObject("$in", list));
+             FindIterable<Document> documents = collections.find(inQuery);
+             for (Document d : documents) {
+                      System.out.println(d.toJson());
+                  }
+        
     }
 
     private static void executeChoice11(MongoCollection<Document> collection) {
+    	
+    	
+    	
     }
 
     private static void executeChoice12(MongoCollection<Document> collection) {
+    	
+    	
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+        
+        BasicDBObject andQuery = new BasicDBObject();
+           List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+            obj.add(new BasicDBObject("name", "Lady of the Evening"));
+            obj.add(new BasicDBObject("country", "AD"));
+            andQuery.put("$and", obj);
+            FindIterable<Document> documents = collections.find(andQuery).sort(new BasicDBObject("popularity",1)).limit(1);
+           for (Document d : documents) {
+                 System.out.println(d.toJson());
+             }
+        
+        
+        
+        
+    	
 
     }
 
@@ -174,7 +231,16 @@ public class Console {
     }
 
     private static void executeChoice15(MongoCollection<Document> collection) {
-
+    	MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("spotify");
+        MongoCollection<Document> collections = database.getCollection("spotify");
+        
+        Document document = new Document();
+        document.append("name", "Faded");
+        document.append("artist", "Alan Walker");
+        document.append("release_date", 2015);
+        collections.insertOne(document);
+        
     }
 
     private static void executeChoice1(MongoCollection<Document> collection) {
