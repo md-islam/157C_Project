@@ -4,7 +4,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
@@ -32,23 +31,29 @@ public class Console {
 		MongoCollection<Document> collection = database.getCollection("spotify");
 		Scanner in = new Scanner(System.in);
 		displayChoices();
+		System.out.println();
+		System.out.println();
 		boolean keepAsking = true;
 		while (keepAsking) {
 
 			int choice = in.nextInt();
+			in.nextLine();
 			switch (choice) {
 			case 1:
-				System.out.print("You have chosen to find the danceability of songs within a specific country");
-				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: ");
-				String countryCode = in.nextLine();
-				System.out.println("Enter a decimal number between 0 and 1 of danceability");
-				double danceability = 0;
-				executeChoice1(collection, countryCode, danceability);
+				System.out.print("You have chosen to find the energy of songs within a specific country \n");
+				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: \n");
+				String countryCode = in.next();
+				in.nextLine();
+				System.out.println("Enter a decimal number between 0 and 1 of energy");
+				double energy = in.nextDouble();
+				in.nextLine();
+				executeChoice1(collection, countryCode, energy);
 				break;
 			case 2:
-				System.out.print("You have chosen to find the most popular artist in a specific country");
-				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: ");
-				String countryCode2 = in.nextLine();
+				System.out.print("You have chosen to find the most popular artist in a specific country \n");
+				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: \n");
+				String countryCode2 = in.next();
+				in.nextLine();
 				executeChoice2(collection, countryCode2);
 				break;
 			case 3:
@@ -85,12 +90,14 @@ public class Console {
 				System.out.println("You have chosen to find songs that released in a particular year");
 				System.out.println("Enter the year: ");
 				int year = in.nextInt();
+				in.nextLine();
 				executeChoice8(collection, year);
 				break;
 			case 9:
-				System.out.println("You have chosen to find the most popluar explicit song in a specific country");
-				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: ");
-				String countryCode3 = in.nextLine();
+				System.out.println("You have chosen to find the most popular explicit song in a specific country \n");
+				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: \n");
+				String countryCode3 = in.next();
+				in.nextLine();
 				executeChoice9(collection, countryCode3);
 				break;
 			case 10:
@@ -104,7 +111,7 @@ public class Console {
 				executeChoice10(collection, year1, year2, year3);
 				break;
 			case 11:
-				System.out.println("You have chosen to find songs that has at least 1 danceability");
+				System.out.println("You have chosen to find songs that is danceable to");
 				executeChoice11(collection);
 				break;
 			case 12:
@@ -112,13 +119,15 @@ public class Console {
 				System.out.print("Enter the song's name: ");
 				String song = in.nextLine();
 				System.out.print("Enter the country code(Ex.US,HK,JP) where you would like to query from: ");
-				String countryCode4 = in.nextLine();
+				String countryCode4 = in.next();
+				in.nextLine();
 				executeChoice12(collection, song, countryCode4);
 				break;
 			case 13:
 				System.out.println("You have chosen to find songs that have a duration longer than a particular value");
 				System.out.print("Enter the duration time(in miliseconds): ");
 				int time = in.nextInt();
+				in.nextLine();
 				executeChoice13(collection, time);
 				break;
 			case 14:
@@ -127,6 +136,7 @@ public class Console {
 				String artistName3 = in.nextLine();
 				System.out.println("Enter the minimum tempo value(integer): ");
 				int tempo = in.nextInt();
+				in.nextLine();
 				executeChoice14(collection, artistName3, tempo);
 				break;
 			case 15:
@@ -137,7 +147,8 @@ public class Console {
 				String newArtist = in.nextLine();
 				System.out.println("Enter the song's release year: ");
 				int year4 = in.nextInt();
-				executeChoice15(collection, newArtist, song2, year4);
+				in.nextLine();
+				executeChoice15(collection, song2, newArtist, year4);
 				break;
 			default:
 				System.out.println("Invalid choice !");
@@ -145,6 +156,7 @@ public class Console {
 			}
 			System.out.println("Want to execute another query ? (Y/N)");
 			String yesNoInput = in.next();
+			in.nextLine();
 			keepAsking = yesNoInput.equalsIgnoreCase("Y") || yesNoInput.equalsIgnoreCase("yes");
 			if (keepAsking) {
 				displayChoices();
@@ -154,70 +166,94 @@ public class Console {
 
 	private static void displayChoices() {
 		System.out.printf("Operation %d: %s", 1,
-				"Find danceability of a song track greater than a specific value within a specific country\n");
+				"Find names of song tracks greater than a specific value of energy within a specific country\n");
 		System.out.printf("Operation %d: %s", 2, "Which artist is the most popular in a specific country?\n");
 		System.out.printf("Operation %d: %s", 3, "For a given artist, which song is the most popular??\n");
 		System.out.printf("Operation %d: %s", 4, "Update the database with a new song title\n");
 		System.out.printf("Operation %d: %s", 5, "Delete a song from the database\n");
 		System.out.printf("Operation %d: %s", 6, "Which song has the longest duration?\n");
 		System.out.printf("Operation %d: %s", 7, "Which song is the least popular for a given artist\n");
-		System.out.printf("Operation %d: %s", 8, "Find songs that are released in 2000\n");
-		System.out.printf("Operation %d: %s", 9, "Which explicit song is the most/least popular in a given country?\n");
-		System.out.printf("Operation %d: %s", 10, "Find songs that released between 2000 and 2002\n");
-		System.out.printf("Operation %d: %s", 11, "Find a song that has at least 1 danceability\n");
+		System.out.printf("Operation %d: %s", 8, "Find songs that are released in a particular year\n");
+		System.out.printf("Operation %d: %s", 9, "Which explicit song is the most popular in a given country?\n");
+		System.out.printf("Operation %d: %s", 10, "Find songs that released in 3 particular years\n");
+		System.out.printf("Operation %d: %s", 11, "Find a song that is danceable to\n");
 		System.out.printf("Operation %d: %s", 12,
 				"For a particular song, find its popularity(in a particular country)\n");
-		System.out.printf("Operation %d: %s", 13, "Find songs that has duration of longer than 100000 seconds\n");
+		System.out.printf("Operation %d: %s", 13, "Find a song of particular duration (in milliseconds)\n");
 		System.out.printf("Operation %d: %s", 14,
-				"Find songs that has tempo of longer than 70 for a particular artist(Maria Konopnicka)\n");
+				"Find songs that has tempo greater than certain value for a particular artist\n");
 		System.out.printf("Operation %d: %s", 15, "Insert a particular song information\n");
 		System.out.println("Enter a number for the operation you want to do");
 	}
 
 	// Find danceability of a track greater than a specific value within a specific
 	// country
-	private static void executeChoice1(MongoCollection<Document> collection, String countryCode, double danceability) {
+	private static void executeChoice1(MongoCollection<Document> collection, String countryCode, double energy) {
 		// Find danceability of a track greater than a specific value within a specific
 		// country
-		FindIterable<Document> documents = collection
-				.find(new Document("danceability", new Document("$gte", danceability).append("country", countryCode)));
+
+		BasicDBObject andQuery = new BasicDBObject();
+		List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+		obj.add(new BasicDBObject("country", countryCode));
+		obj.add(new BasicDBObject("energy", new BasicDBObject("$gte", energy)));
+		andQuery.put("$and", obj);
+		FindIterable<Document> documents = collection.find(andQuery).limit(10);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
+		System.out.println();
 	}
 
 	// Which artist is the most popular in a specific country?
 	private static void executeChoice2(MongoCollection<Document> collection, String countryCode) {
 		FindIterable<Document> documents = collection.find(eq("country", countryCode))
-				.sort(Sorts.descending("popularity")).limit(1);
+				.sort(new BasicDBObject("popularity", -1)).limit(1);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
+		System.out.println();
 	}
 
 	// For a given artist, which song is the most popular?
 	private static void executeChoice3(MongoCollection<Document> collection, String artist) {
-		FindIterable<Document> documents = collection.find(new Document("artists", new Document("$in", artist)))
-				.sort(Sorts.descending("popularity")).limit(1);
+		FindIterable<Document> documents = collection.find(new BasicDBObject("artists", artist))
+				.sort(new BasicDBObject("popularity", -1)).limit(1);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
+		System.out.println();
 	}
 
 	// update name of song title
 	private static void executeChoice4(MongoCollection<Document> collection, String title, String newTitle) {
-		collection.updateOne(eq("name", title), set("title", newTitle));
-		System.out.println("Finding this document to verify it's actually updated");
-		FindIterable<Document> documents = collection.find(eq("title", newTitle));
+		System.out.println("Finding this document before we update");
+		FindIterable<Document> documents = collection.find(eq("title", title));
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
+		System.out.println();
+		System.out.println("Now let's update....");
+		collection.updateOne(eq("name", title), set("title", newTitle));
+		System.out.println("Finding this document to verify it's actually updated");
+		documents = collection.find(eq("title", newTitle));
+		for (Document d : documents) {
+			System.out.println(d.toJson());
+		}
+		System.out.println();
 	}
 
 	// delete
 	private static void executeChoice5(MongoCollection<Document> collection, String songName) {
+		System.out.println("Finding the document before we delete");
 		FindIterable<Document> documents = collection.find(eq("name", songName));
+		for (Document d : documents) {
+			System.out.println(d.toJson());
+		}
+		System.out.println();
+		System.out.println("Now let's delete");
 		collection.deleteOne(eq("name", songName));
+		System.out.println("Printing documents below after delete");
+		documents = collection.find(eq("name", songName));
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
@@ -225,49 +261,44 @@ public class Console {
 	
 	//find song that has the longest duration
 	private static void executeChoice6(MongoCollection<Document> collection) {
-
 		FindIterable<Document> documents = collection.find().sort(new BasicDBObject("duration_ms", -1)).limit(1);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice7(MongoCollection<Document> collection, String artist) {
-
 		FindIterable<Document> documents = collection.find(new BasicDBObject("artists", artist))
 				.sort(new BasicDBObject("popularity", -1)).limit(1);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice8(MongoCollection<Document> collection, int year) {
-
-		FindIterable<Document> documents = collection.find(eq("release_date", year));
+		FindIterable<Document> documents = collection.find(eq("release_date", year)).limit(100);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice9(MongoCollection<Document> collection, String country) {
-
 		BasicDBObject andQuery = new BasicDBObject();
 		List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
 		obj.add(new BasicDBObject("explicit", 1));
 		obj.add(new BasicDBObject("country", country));
 		andQuery.put("$and", obj);
-		FindIterable<Document> documents = collection.find(andQuery).sort(new BasicDBObject("popularity", 1)).limit(1);
+		FindIterable<Document> documents = collection.find(andQuery).sort(new BasicDBObject("popularity", -1)).limit(1);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice10(MongoCollection<Document> collection, int year1, int year2, int year3) {
-
 		BasicDBObject inQuery = new BasicDBObject();
 		List<Integer> list = new ArrayList<Integer>();
 		list.add(year1);
@@ -278,20 +309,16 @@ public class Console {
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
 	}
 
 	private static void executeChoice11(MongoCollection<Document> collection) {
-
 		BasicDBObject getQuery = new BasicDBObject();
-		getQuery.put("danceability", new BasicDBObject("$gt", 1));
-
+		getQuery.put("danceability", new BasicDBObject("$gte", 0.7));
 		FindIterable<Document> documents = collection.find(getQuery).limit(1);
-
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice12(MongoCollection<Document> collection, String song, String country) {
@@ -305,42 +332,53 @@ public class Console {
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice13(MongoCollection<Document> collection, int time) {
 
 		BasicDBObject getQuery = new BasicDBObject();
 		getQuery.put("duration_ms", new BasicDBObject("$gt", time));
-		FindIterable<Document> documents = collection.find(getQuery);
+		FindIterable<Document> documents = collection.find(getQuery).limit(10);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
+		System.out.println();
 	}
 
 	private static void executeChoice14(MongoCollection<Document> collection,String artist,int tempo) {
 
 		BasicDBObject andQuery = new BasicDBObject();
 		List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
-		obj.add(new BasicDBObject("artist", artist));
-		obj.add(new BasicDBObject("tempo", new BasicDBObject("$gt", tempo)));
+		obj.add(new BasicDBObject("artists", artist));
+		obj.add(new BasicDBObject("tempo", new BasicDBObject("$gte", tempo)));
 		andQuery.put("$and", obj);
-		FindIterable<Document> documents = collection.find(andQuery);
+		FindIterable<Document> documents = collection.find(andQuery).limit(2);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
-
+		System.out.println();
 	}
 
 	private static void executeChoice15(MongoCollection<Document> collection, String song, String artist,int year) {
-
+		System.out.println("Before inserting a document, here are the current documents for this artist");
+		FindIterable<Document> documents = collection.find(new BasicDBObject("artists", artist));
+		for (Document d : documents) {
+			System.out.println(d.toJson());
+		}
+		System.out.println();
 		Document document = new Document();
 		document.append("name", song);
-		document.append("artist", artist);
+		document.append("artists", artist);
 		document.append("release_date", year);
 		collection.insertOne(document);
 		System.out.println("New song has been added");
-
+		System.out.println("Now let's print below with the new document added ....");
+		documents = collection.find(new BasicDBObject("artists", artist));
+		for (Document d : documents) {
+			System.out.println(d.toJson());
+		}
+		System.out.println();
 	}
 
 }
