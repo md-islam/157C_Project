@@ -26,7 +26,7 @@ public class Console {
 	}
 
 	private static void runProgram() {
-		MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017"); // need to change this
+		MongoClient mongoClient = MongoClients.create("mongodb://ec2-3-17-167-23.us-east-2.compute.amazonaws.com:27001"); // need to change this
 		MongoDatabase database = mongoClient.getDatabase("spotify");
 		MongoCollection<Document> collection = database.getCollection("spotify");
 		Scanner in = new Scanner(System.in);
@@ -77,8 +77,10 @@ public class Console {
 				executeChoice5(collection, songNameDelete);
 				break;
 			case 6:
-				System.out.println("You have chosen to find the longest song");
-				executeChoice6(collection);
+				System.out.println("You have chosen to find the longest song in a specific release year");
+				System.out.println("Enter the year: ");
+				int year2 = in.nextInt();
+				executeChoice6(collection, year2);
 				break;
 			case 7:
 				System.out.println("You have chosen to find the least popular song for a particular artist");
@@ -101,14 +103,11 @@ public class Console {
 				executeChoice9(collection, countryCode3);
 				break;
 			case 10:
-				System.out.println("You have chosen to find songs released in 3 particular years");
-				System.out.println("Enter year 1: ");
-				int year1 = in.nextInt();
-				System.out.println("Enter year 2: ");
-				int year2 = in.nextInt();
-				System.out.println("Enter year 3: ");
-				int year3 = in.nextInt();
-				executeChoice10(collection, year1, year2, year3);
+				System.out.println("You have chosen to find songs that has instrumentalness of a certain value");
+				System.out.println("Enter instrumentalness(bewteen 0 and 1): ");
+				double instrumental = in.nextDouble();
+				in.nextLine();
+				executeChoice10(collection, instrumental);
 				break;
 			case 11:
 				System.out.println("You have chosen to find songs that is danceable to");
@@ -175,7 +174,7 @@ public class Console {
 		System.out.printf("Operation %d: %s", 7, "Which song is the least popular for a given artist\n");
 		System.out.printf("Operation %d: %s", 8, "Find songs that are released in a particular year\n");
 		System.out.printf("Operation %d: %s", 9, "Which explicit song is the most popular in a given country?\n");
-		System.out.printf("Operation %d: %s", 10, "Find songs that released in 3 particular years\n");
+		System.out.printf("Operation %d: %s", 10, "Find songs that has instrumentalness value of a certain value\n");
 		System.out.printf("Operation %d: %s", 11, "Find a song that is danceable to\n");
 		System.out.printf("Operation %d: %s", 12,
 				"For a particular song, find its popularity(in a particular country)\n");
@@ -260,8 +259,8 @@ public class Console {
 	}
 	
 	//find song that has the longest duration
-	private static void executeChoice6(MongoCollection<Document> collection) {
-		FindIterable<Document> documents = collection.find().sort(new BasicDBObject("duration_ms", -1)).limit(1);
+	private static void executeChoice6(MongoCollection<Document> collection, int year) {
+		FindIterable<Document> documents = collection.find(eq("release_date", year)).sort(new BasicDBObject("duration_ms", -1)).limit(1);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
@@ -298,14 +297,8 @@ public class Console {
 		System.out.println();
 	}
 
-	private static void executeChoice10(MongoCollection<Document> collection, int year1, int year2, int year3) {
-		BasicDBObject inQuery = new BasicDBObject();
-		List<Integer> list = new ArrayList<Integer>();
-		list.add(year1);
-		list.add(year2);
-		list.add(year3);
-		inQuery.put("release_date", new BasicDBObject("$in", list));
-		FindIterable<Document> documents = collection.find(inQuery);
+	private static void executeChoice10(MongoCollection<Document> collection, double instrumental) {		
+		FindIterable<Document> documents = collection.find(eq("instrumentalness", instrumental)).limit(10);
 		for (Document d : documents) {
 			System.out.println(d.toJson());
 		}
